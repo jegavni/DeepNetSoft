@@ -1,5 +1,5 @@
 // controllers/menuController.js
-import Menu from "../models/Menu.js";
+import Menu from "../Models/Menu.js";
 
 // Get all menus
 export const getMenus = async (req, res) => {
