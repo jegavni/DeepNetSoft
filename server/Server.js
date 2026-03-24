@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import menuRoutes from "./routes/menuRoutes.js";
+import menuRoutes from "./routes/MenuRoutes.js";
 import subMenuRoutes from "./routes/SubMenuRoute.js";
 
 dotenv.config();

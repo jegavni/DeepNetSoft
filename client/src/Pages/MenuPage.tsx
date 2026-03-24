@@ -1,4 +1,4 @@
-import  { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal } from "../Components/Modal";
 import { PopupForm } from "../Components/createMenu";
 
@@ -6,6 +6,7 @@ import { PopupForm } from "../Components/createMenu";
 interface Menu {
   _id: string;
   name: string;
+  description?: string;
   parentId: string | null;
 }
 
@@ -13,9 +14,12 @@ export const MenuPage = () => {
   const [menus, setMenus] = useState<Menu[]>([]);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null); // 👈 NEW
   const [activeParentId, setActiveParentId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   // Fetch menus
   const fetchMenus = async () => {
     try {
@@ -27,31 +31,27 @@ const menuRef = useRef<HTMLDivElement | null>(null);
     }
   };
 
-useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-
-    // ✅ Ignore button clicks (Add / Submenu)
-    if (target.closest("button")) return;
-
-    // ✅ Ignore modal clicks
-    if (target.closest(".modal-content")) return;
-
-    if (menuRef.current && !menuRef.current.contains(target)) {
-      setExpandedMenus({});
-      setSelectedCategoryId(null);
-    }
-  };
-
-  document.addEventListener("mousedown", handleClickOutside);
-
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
-
   useEffect(() => {
     fetchMenus();
+  }, []);
+
+  // Click outside → collapse
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (target.closest("button")) return;
+      if (target.closest(".modal-content")) return;
+
+      if (menuRef.current && !menuRef.current.contains(target)) {
+        setExpandedMenus({});
+        setSelectedCategoryId(null);
+        setSelectedMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Toggle expand
@@ -65,31 +65,47 @@ useEffect(() => {
   // Categories
   const categories = menus.filter(menu => !menu.parentId);
 
-  // 🔥 Recursive renderer (Tailwind only)
+  // 🔥 Recursive Menu Renderer
   const renderMenus = (parentId: string | null, level = 0) => {
     return menus
       .filter(menu => menu.parentId === parentId)
       .map(menu => (
         <div key={menu._id} className="mb-2">
 
-          {/* Menu Row */}
           <div
-            className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2 rounded hover:bg-gray-800 cursor-pointer ${
+            className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2 rounded hover:bg-gray-800 ${
               level > 0 ? "pl-4 sm:pl-6 border-l border-gray-700" : ""
             }`}
-            onClick={() => toggleMenu(menu._id)}
           >
+            {/* LEFT SIDE */}
             <div className="flex items-center gap-2">
-              <span className="text-xs">
+
+              {/* 🔽 Arrow (ONLY expand) */}
+              <span
+                className="text-xs cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleMenu(menu._id);
+                }}
+              >
                 {expandedMenus[menu._id] ? "▼" : "▶"}
               </span>
-              <span className="font-semibold text-sm sm:text-base">
+
+              {/* 📝 Name (ONLY show description) */}
+              <span
+                className="font-semibold text-sm sm:text-base cursor-pointer hover:text-yellow-400"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedMenu(menu);
+                }}
+              >
                 {menu.name}
               </span>
             </div>
 
+            {/* ➕ Add Submenu */}
             <button
-              className="text-yellow-400 text-xs sm:text-sm self-start sm:self-auto"
+              className="text-yellow-400 text-xs sm:text-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 setActiveParentId(menu._id);
@@ -100,7 +116,7 @@ useEffect(() => {
             </button>
           </div>
 
-          {/* Children */}
+          {/* CHILDREN */}
           {expandedMenus[menu._id] && (
             <div className="ml-2 sm:ml-4">
               {renderMenus(menu._id, level + 1)}
@@ -114,62 +130,79 @@ useEffect(() => {
     <div className="bg-black text-white ">
 
       {/* 🔥 HEADER */}
-      <div className="bg-gray-900 py-10 text-center px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-500">
-          MENU
-        </h1>
-        <p className="text-gray-400 mt-2 text-sm sm:text-base">
-          Explore our food, drinks and brunch
-        </p>
+      <div className="bg-gray-900 py-8 text-center px-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-red-500">MENU</h1>
+        <p className="text-gray-400 mt-2">Explore our food, drinks and brunch</p>
 
         {/* Categories */}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           {categories.map(cat => (
             <button
               key={cat._id}
-              onClick={() => setSelectedCategoryId(cat._id)}
-              className={`px-4 sm:px-6 py-2 rounded border text-sm sm:text-base transition ${
+              onClick={() => {
+                setSelectedCategoryId(cat._id);
+                setSelectedMenu(null);
+              }}
+              className={`px-4 py-2 rounded border ${
                 selectedCategoryId === cat._id
                   ? "bg-yellow-500 text-black"
-                  : "border-gray-500 text-white"
+                  : "border-gray-500"
               }`}
             >
               {cat.name}
             </button>
           ))}
         </div>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+      </div>
+
+      {/* 🔥 CONTENT */}
+      <div className="max-w-5xl mx-auto px-4 py-6">
 
         {/* Add Menu */}
         {selectedCategoryId && (
-          <div className="flex justify-center sm:justify-start mb-6">
-            <button
-              className="bg-yellow-500 text-black px-4 py-2 rounded text-sm sm:text-base"
-              onClick={() => {
-                setActiveParentId(selectedCategoryId);
-                setIsModalOpen(true);
-              }}
-            >
-              + Add Menu
-            </button>
-          </div>
+          <button
+            className="mb-4 bg-yellow-500 text-black px-4 py-2 rounded"
+            onClick={() => {
+              setActiveParentId(selectedCategoryId);
+              setIsModalOpen(true);
+            }}
+          >
+            + Add Menu
+          </button>
         )}
 
-        {/* Menu Tree */}
-        {selectedCategoryId ? (
-          <div ref={menuRef} className="space-y-2">
-            {renderMenus(selectedCategoryId)}
-          </div>
-        ) : (
-          <p className="text-gray-400 text-center">
-            Select a category
-          </p>
-        )}
-      </div>
-      </div>
+        {/* Layout */}
+        <div className="grid md:grid-cols-2 gap-6">
 
-      
-      
+          {/* LEFT: MENU TREE */}
+          <div ref={menuRef}>
+            {selectedCategoryId ? (
+              renderMenus(selectedCategoryId)
+            ) : (
+              <p className="text-gray-400">Select a category</p>
+            )}
+          </div>
+
+          {/* RIGHT: DESCRIPTION */}
+          <div>
+            {selectedMenu ? (
+              <div className="p-4 border border-yellow-500 rounded bg-gray-900">
+                <h2 className="text-xl font-bold text-yellow-400">
+                  {selectedMenu.name}
+                </h2>
+                <p className="text-gray-300 mt-2">
+                  {selectedMenu.description || "No description available"}
+                </p>
+              </div>
+            ) : (
+              <p className="text-gray-500">
+                Click a menu item to see details
+              </p>
+            )}
+          </div>
+
+        </div>
+      </div>
 
       {/* 🔥 MODAL */}
       {isModalOpen && activeParentId && (
@@ -195,13 +228,7 @@ useEffect(() => {
             }}
           />
         </Modal>
-        
       )}
-      
     </div>
   );
-
-  
-
 };
-
