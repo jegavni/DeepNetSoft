@@ -1,6 +1,6 @@
 // routes/subMenuRoutes.js
 import express from "express";
-import { getSubMenus, getSubMenusByMenu, createSubMenu } from "../controllers/subMenuController.js";
+import { getSubMenus, getSubMenusByMenu, createSubMenu } from "../Controllers/SubMenuController.js";
 
 const router = express.Router();
 

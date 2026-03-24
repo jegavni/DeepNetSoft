@@ -1,6 +1,6 @@
 // routes/menuRoutes.js
 import express from "express";
-import { getMenus, getMenuById, createMenu } from "../controllers/MenuController.js";
+import { getMenus, getMenuById, createMenu } from "../Controllers/MenuController.js";
 
 const router = express.Router();
 
