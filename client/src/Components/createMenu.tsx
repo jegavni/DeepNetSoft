@@ -33,7 +33,7 @@ export const PopupForm = ({ category, parentId, isOpen, onClose, refreshMenus }:
     const fetchSubmenus = async () => {
       if (!parentId) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/menus?parentId=${parentId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/menus?parentId=${parentId}`);
         const data: Menu[] = await res.json();
         setSubmenus(data);
       } catch (err) {

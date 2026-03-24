@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import  { useState, useEffect, useRef } from "react";
 import { Modal } from "../Components/Modal";
 import { PopupForm } from "../Components/createMenu";
 
@@ -23,7 +23,7 @@ export const MenuPage = () => {
   // Fetch menus
   const fetchMenus = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/menus");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/menus`);
       const data: Menu[] = await res.json();
       setMenus(data);
     } catch (err) {
