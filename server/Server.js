@@ -16,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use("/api/menus", menuRoutes);
-app.use("/api/submenus", subMenuRoutes);
+app.use("/menus", menuRoutes);
+app.use("/submenus", subMenuRoutes);
 const MONGO_URI =
   process.env.NODE_ENV === "production"
     ? process.env.MONGO_URI_PROD
