@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -6,7 +8,6 @@ import dotenv from "dotenv";
 import menuRoutes from "./routes/MenuRoutes.js";
 import subMenuRoutes from "./routes/SubMenuRoute.js";
 
-dotenv.config();
 
 const app = express();
 
@@ -17,13 +18,16 @@ app.use(express.json());
 // routes
 app.use("/api/menus", menuRoutes);
 app.use("/api/submenus", subMenuRoutes);
-const mongoURI = process.env.MONGO_URI;
+const MONGO_URI =
+  process.env.NODE_ENV === "production"
+    ? process.env.MONGO_URI_PROD
+    : process.env.MONGO_URI_DEV;
 
 // ✅ MongoDB connect
 mongoose
-  .connect(mongoURI)
+  .connect(MONGO_URI)
   .then(() => {
-    console.log(`mongoDB URI: ${mongoURI}`);
+    console.log(`mongoDB URI: ${MONGO_URI}`);
     console.log("✅ MongoDB Connected");
   })
   .catch((err) => console.log("❌ DB Error:", err));
