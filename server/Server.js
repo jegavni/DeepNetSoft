@@ -17,10 +17,7 @@ app.use(express.json());
 // routes
 app.use("/api/menus", menuRoutes);
 app.use("/api/submenus", subMenuRoutes);
-const mongoURI =
-  process.env.NODE_ENV === "production"
-    ? process.env.MONGO_URI_PROD
-    : process.env.MONGO_URI_DEV;
+const mongoURI = process.env.MONGO_URI;
 
 // ✅ MongoDB connect
 mongoose
