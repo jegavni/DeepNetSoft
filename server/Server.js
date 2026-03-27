@@ -23,24 +23,24 @@ const MONGO_URI =
     ? process.env.MONGO_URI_PROD
     : process.env.MONGO_URI_DEV;
 
-// ✅ MongoDB connect
+// MongoDB connect
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log(`mongoDB URI: ${MONGO_URI}`);
-    console.log("✅ MongoDB Connected");
+    console.log("MongoDB Connected");
   })
-  .catch((err) => console.log("❌ DB Error:", err));
+  .catch((err) => console.log(" DB Error:", err));
 
-// ✅ PORT logic
+//  PORT logic
 const PORT =
   process.env.NODE_ENV === "production"
     ? process.env.PORT
     : 5000;
 
-// ✅ Start server
+// Start server
 app.listen(PORT, () => {
   console.log(
-    `🚀 Server running on port ${PORT} (${process.env.NODE_ENV})`
+    ` running on port ${PORT} (${process.env.NODE_ENV})`
   );
 });

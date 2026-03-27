@@ -2,7 +2,7 @@ const Secondary = () =>{
   return (
 <div className="max-w-5xl mx-auto px-4 py-10">
 
-  {/* 🔥 APPETIZERS SECTION */}
+  {/* APPETIZERS SECTION */}
   <div className="border border-yellow-600 p-6 relative bg-black">
 
     {/* Title */}
@@ -44,7 +44,7 @@ const Secondary = () =>{
     </div>
   </div>
 
-  {/* 🔥 SALADS SECTION */}
+  {/*  SALADS SECTION */}
   <div className="mt-10 border border-gray-700 p-6 bg-black">
 
     <div className="mb-6">

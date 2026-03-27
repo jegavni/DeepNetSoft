@@ -1,7 +1,7 @@
 import MenuItem from "../Models/MenuItem.js";
 
 
-// ✅ Create Item
+// Create Item
 export const createItem = async (req, res) => {
   try {
     const { title, description, price, menuId } = req.body;
@@ -20,7 +20,7 @@ export const createItem = async (req, res) => {
 };
 
 
-// ✅ Get Items by Menu
+// Get Items by Menu
 export const getItemsByMenu = async (req, res) => {
   try {
     const items = await MenuItem.find({

@@ -65,7 +65,7 @@ export const MenuPage = () => {
   // Categories
   const categories = menus.filter(menu => !menu.parentId);
 
-  // 🔥 Recursive Menu Renderer
+  //  Recursive Menu Renderer
   const renderMenus = (parentId: string | null, level = 0) => {
     return menus
       .filter(menu => menu.parentId === parentId)
@@ -91,7 +91,7 @@ export const MenuPage = () => {
                 {expandedMenus[menu._id] ? "▼" : "▶"}
               </span>
 
-              {/* 📝 Name (ONLY show description) */}
+              {/*  Name (ONLY show description) */}
               <span
                 className="font-semibold text-sm sm:text-base cursor-pointer hover:text-yellow-400"
                 onClick={(e) => {
@@ -129,7 +129,7 @@ export const MenuPage = () => {
   return (
     <div className="bg-black text-white ">
 
-      {/* 🔥 HEADER */}
+      {/*  HEADER */}
       <div className="bg-gray-900 py-8 text-center px-4">
         <h1 className="text-3xl sm:text-4xl font-bold text-red-500">MENU</h1>
         <p className="text-gray-400 mt-2">Explore our food, drinks and brunch</p>
@@ -155,7 +155,7 @@ export const MenuPage = () => {
         </div>
       </div>
 
-      {/* 🔥 CONTENT */}
+      {/*  CONTENT */}
       <div className="max-w-5xl mx-auto px-4 py-6">
 
         {/* Add Menu */}
@@ -204,7 +204,7 @@ export const MenuPage = () => {
         </div>
       </div>
 
-      {/* 🔥 MODAL */}
+      {/*  c  MODAL */}
       {isModalOpen && activeParentId && (
         <Modal isOpen={true} onClose={() => setIsModalOpen(false)}>
           <PopupForm

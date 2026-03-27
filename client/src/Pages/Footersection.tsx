@@ -3,7 +3,7 @@ const FooterSection = () => {
   return (
     <div className="bg-black text-white mt-10">
 
-      {/* 🔥 OPENING HOURS */}
+      {/*  OPENING HOURS */}
       <div className="max-w-6xl mx-auto px-4">
         <div className="border border-gray-700 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
@@ -37,7 +37,7 @@ const FooterSection = () => {
         </div>
       </div>
 
-      {/* 🔥 FOOTER CARDS */}
+      {/* FOOTER CARDS */}
       <div className="max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {/* Connect */}
@@ -75,7 +75,7 @@ const FooterSection = () => {
         </div>
       </div>
 
-      {/* 🔥 BOTTOM BAR */}
+      {/*  BOTTOM BAR */}
       <div className="bg-gray-900 mt-10 py-4 text-center text-sm text-gray-400">
         © 2026 Deepnetsoft Solutions. All rights reserved.
         <div className="mt-2 space-x-4">
